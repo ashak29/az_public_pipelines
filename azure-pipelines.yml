@@ -4,7 +4,10 @@ trigger:
 - az-pipelines
 
 pool:
-  name: Default
+  vmImage: "windows-latest"
+  
+# pool:
+#   name: Default
 
 pr:
  branches:
