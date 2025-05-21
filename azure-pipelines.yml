@@ -1,7 +1,9 @@
 # CI\CD
 
 trigger:
-- az-pipelines
+ branches:
+   include:
+     - az-pipelines
 
 pool:
   vmImage: "windows-latest"
