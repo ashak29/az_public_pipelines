@@ -15,37 +15,53 @@ pool:
 #     Python312:
 #       python.version: '3.12'
 
-steps:
-  - task: UsePythonVersion@0
-    inputs:
-      versionSpec: '3.x'
-      addToPath: true
-      architecture: 'x64'
-    displayName: 'Use python version'
+stages:
+  - stage: 'pyVersion'
+    jobs:
+      - job: 'pythonVersion'
+        displayName: 'Run cmd'
+        steps:
+          - task: UsePythonVersion@0
+            inputs:
+              versionSpec: '3.x'
+              addToPath: true
+              architecture: 'x64'
+            displayName: 'Use python version'
+          
+          - script: |
+              python --version
+              py -m pip install --upgrade pip
+              pip install -r requirements.txt
+            displayName: 'Install dependencies'
   
-  - script: |
-      python --version
-      py -m pip install --upgrade pip
-      pip install -r requirements.txt
-    displayName: 'Install dependencies'
-  
-  - task: ArchiveFiles@2
-    inputs:
-      rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
-      includeRootFolder: true
-      archiveType: 'zip'
-      archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
-      replaceExistingArchive: true
-    displayName: 'Archive files'
-    
-  - task: PublishBuildArtifacts@1
-    inputs:
-      PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-      ArtifactName: 'Artifact 1'
-      publishLocation: 'Container'
-    displayName: 'publish buildArtifat'
+  - stage: 'archiveFile'
+    jobs:
+      - job : "Archivefile"
+        displayName: 'Store a file'
+        steps:
+          - task: ArchiveFiles@2
+            inputs:
+              rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
+              includeRootFolder: true
+              archiveType: 'zip'
+              archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+              replaceExistingArchive: true
+            displayName: 'Archive files'
 
-      
+  - stage : 'publishArtifacts'
+    jobs:
+      - job: 'publishArtifacts'
+        # displayName: 'Publish Artifacts'    
+        steps:
+        
+        - task: PublishBuildArtifacts@1
+          inputs:
+            PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+            ArtifactName: 'Artifact 1'
+            publishLocation: 'Container'
+          displayName: 'publish buildArtifat'
+
+          
 # - script: echo Hello, world!
 #   displayName: 'Run a one-line script'
 
