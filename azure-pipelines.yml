@@ -6,6 +6,10 @@ trigger:
 pool:
   name: Default
 
+pr:
+ branches:
+   include:
+     - main
 # strategy:
 #   matrix:
 #     Python310:
