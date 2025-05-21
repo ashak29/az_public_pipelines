@@ -37,7 +37,7 @@ stages:
               echo 'template - ${{variables.var1}}'
               echo 'macro - ${var1}'
               echo 'runtime - $[variables.var1]'
-              displayName: 'templates'
+            displayName: 'templates'
    
           - task: UsePythonVersion@0
             inputs:
