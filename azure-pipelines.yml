@@ -23,13 +23,22 @@ pr:
 #       python.version: '3.11'
 #     Python312:
 #       python.version: '3.12'
+variables:
+  va1: 'one'
 
+         
 stages:
   - stage: 'pyVersion'
     jobs:
       - job: 'pythonVersion'
         displayName: 'Run cmd'
         steps:
+          - script: |
+              echo 'template - ${{variables.var1}}'
+              echo 'macro - ${var1}'
+              echo 'runtime - $[variables.var1]'
+              displayName: 'templates'
+   
           - task: UsePythonVersion@0
             inputs:
               versionSpec: '3.x'
